@@ -16,48 +16,102 @@ class Node
   def remove
     # optional but useful, connects previous link to next link
     # and removes self from list.
+    @prev.next = self.next
+    @next.prev = self.prev
   end
 
 end
 
 class LinkedList
-  def initialize
-  end
+    include Enumerable
 
-  def [](i)
-    each_with_index { |node, j| return node if i == j }
-    nil
-  end
+    def initialize
+        @head = Node.new
+        @tail = Node.new
+        @head.next = @tail
+        @tail.prev = @head
+    end
 
-  def first
-  end
+    def [](i)
+        current_node = @head
+        (i+1).times do
+            current_node = current_node.next
+            return nil if current_node == @tail
+        end
+        return current_node
+    end
 
-  def last
-  end
+    def first
+        return nil if @head.next == @tail
+        @head.next
+    end
 
-  def empty?
-  end
+    def last
+        return nil if @tail.prev == @head
+        @tail.prev
+    end
 
-  def get(key)
-  end
+    def empty?
+        @head.next == @tail
+    end
 
-  def include?(key)
-  end
+    def get(key)
+        current_node = @head
+        until current_node == @tail
+            return current_node.val if current_node.key == key
+            current_node = current_node.next
+        end
+        nil
+    end
 
-  def append(key, val)
-  end
+    def include?(key)
+        !self.get(key).nil?
+    end
 
-  def update(key, val)
-  end
+    def append(key, val)
+        new_node = Node.new(key, val)
+        last_node = self.last || @head
+        new_node.prev = last_node
+        last_node.next = new_node
+        new_node.next = @tail
+        @tail.prev = new_node
+    end
 
-  def remove(key)
-  end
+    def update(key, val)
+        current_node = @head
+        until current_node == @tail
+            if current_node.key == key
+                current_node.val = val
+                return true
+            end
+            current_node = current_node.next
+        end
+        false
+    end
 
-  def each
-  end
+    def remove(key)
+        current_node = @head
+        until current_node == @tail
+            if current_node.key == key
+                current_node.remove
+                return true
+            end
+            current_node = current_node.next
+        end
+        false
+    end
 
-  # uncomment when you have `each` working and `Enumerable` included
-  # def to_s
-  #   inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
-  # end
+    def each(&prc)
+        current_node = @head.next
+        until current_node == @tail
+            prc.call(current_node)
+            current_node = current_node.next
+        end
+        return
+    end
+
+    # uncomment when you have `each` working and `Enumerable` included
+    # def to_s
+    #   inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
+    # end
 end

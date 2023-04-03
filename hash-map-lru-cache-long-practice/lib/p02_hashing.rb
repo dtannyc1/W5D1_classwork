@@ -14,12 +14,9 @@ end
 
 class String
   def hash
-    outHash = 0
     alphabet = ("a".."z").to_a
-    self.each_char.with_index do |char, ii|
-        outHash += (alphabet.index(char)).hash * ii.hash
-    end
-    outHash
+    string_to_intArray = self.split("").map {|char| alphabet.index(char)}
+    string_to_intArray.hash
   end
 end
 

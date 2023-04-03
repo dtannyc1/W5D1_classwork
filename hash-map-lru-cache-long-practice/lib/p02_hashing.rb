@@ -4,11 +4,22 @@ end
 
 class Array
   def hash
+    outHash = 0
+    self.each_with_index do |ele, ii|
+        outHash += ele.hash * ii.hash
+    end
+    outHash
   end
 end
 
 class String
   def hash
+    outHash = 0
+    alphabet = ("a".."z").to_a
+    self.each_char.with_index do |char, ii|
+        outHash += (alphabet.index(char)).hash * ii.hash
+    end
+    outHash
   end
 end
 

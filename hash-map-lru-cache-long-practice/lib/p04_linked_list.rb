@@ -56,10 +56,10 @@ class LinkedList
     end
 
     def get(key)
-        current_node = @head
-        until current_node == @tail
-            return current_node.val if current_node.key == key
-            current_node = current_node.next
+        self.each do |node|
+            if node.key == key
+                return node.val
+            end
         end
         nil
     end
@@ -71,6 +71,8 @@ class LinkedList
     def append(key, val)
         new_node = Node.new(key, val)
         last_node = self.last || @head
+
+        # update pointers for last_node, new_node, and tail
         new_node.prev = last_node
         last_node.next = new_node
         new_node.next = @tail
@@ -78,13 +80,11 @@ class LinkedList
     end
 
     def update(key, val)
-        current_node = @head
-        until current_node == @tail
-            if current_node.key == key
-                current_node.val = val
+        self.each do |node|
+            if node.key == key
+                node.val = val
                 return true
             end
-            current_node = current_node.next
         end
         false
     end
@@ -111,7 +111,7 @@ class LinkedList
     end
 
     # uncomment when you have `each` working and `Enumerable` included
-    # def to_s
-    #   inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
-    # end
+    def to_s
+      inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
+    end
 end

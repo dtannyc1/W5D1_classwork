@@ -23,7 +23,11 @@ end
 class Hash
   # This returns 0 because rspec will break if it returns nil
   # Make sure to implement an actual Hash#hash method
-  def hash
-    0
-  end
+    def hash
+        outHash = 0
+        self.each do |key, value|
+            outHash += key.hash * value.hash
+        end
+        outHash
+    end
 end
